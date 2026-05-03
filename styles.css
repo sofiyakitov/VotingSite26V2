@@ -1,0 +1,265 @@
+:root {
+    /* Nuvialund Inspired Colors */
+    --global-main-color: #aec3ab; /* Soft green */
+    --global-main-dark: #8c9e89;
+    --global-main-light: #d6e2d4;
+    --bg-cream: #f6f2e7;
+    --text-dark: #1a1a1a;
+    --text-light: #ffffff;
+    
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Barlow', sans-serif;
+    
+    /* Variables */
+    --border-radius-lg: 1rem;
+    --border-radius-md: 0.5rem;
+    --transition-speed: 0.3s;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--text-dark);
+    background-color: var(--text-light);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6, .font-playfair {
+    font-family: var(--font-heading);
+}
+
+/* Utilities */
+.bg-cream {
+    background-color: var(--bg-cream);
+}
+.bg-green {
+    background-color: var(--global-main-color);
+}
+.text-green {
+    color: var(--global-main-color);
+}
+.hidden {
+    display: none !important;
+}
+
+/* Custom Focus for Accessibility */
+*:focus-visible {
+    outline: 3px solid var(--global-main-dark);
+    outline-offset: 3px;
+}
+
+/* Custom Buttons */
+.btn-custom {
+    background-color: var(--global-main-color);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 50px;
+    padding: 0.75rem 2rem;
+    font-weight: 700;
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-custom:hover, .btn-custom:focus {
+    background-color: var(--global-main-dark);
+    color: var(--text-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 1rem;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: var(--global-main-color);
+    border-radius: 2px;
+}
+
+/* Hero Section */
+.hero-section {
+    min-height: 80vh;
+    background-color: var(--text-light);
+    position: relative;
+    overflow: hidden;
+}
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.2;
+}
+.hero-subtitle {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--global-main-dark);
+    font-weight: 400;
+}
+.hero-description {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+.hero-image {
+    max-height: 600px;
+    object-fit: cover;
+    width: 100%;
+}
+
+/* Carousel Section */
+.custom-carousel {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.carousel-track-container {
+    overflow: hidden;
+    padding: 1rem 0;
+}
+.carousel-track {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    transition: transform 0.4s ease-in-out;
+}
+.carousel-slide {
+    min-width: 100%;
+    padding: 0 1rem;
+}
+.custom-card {
+    border: none;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    background-color: var(--text-light);
+    transition: transform var(--transition-speed);
+}
+.custom-card:hover {
+    transform: translateY(-5px);
+}
+.carousel-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+.carousel-btn {
+    background: var(--global-main-color);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-dark);
+    transition: all var(--transition-speed);
+}
+.carousel-btn:hover {
+    background: var(--global-main-dark);
+    color: var(--text-light);
+}
+.carousel-nav {
+    display: flex;
+    gap: 0.5rem;
+}
+.carousel-indicator {
+    border: none;
+    background: #ccc;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background var(--transition-speed);
+}
+.carousel-indicator.current-indicator {
+    background: var(--global-main-dark);
+    transform: scale(1.2);
+}
+
+/* How to vote (Infographic) */
+.step-card {
+    background-color: var(--text-light);
+    border: 2px solid var(--global-main-light);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+.step-card:hover, .step-card[aria-expanded="true"] {
+    background-color: var(--global-main-color);
+    border-color: var(--global-main-color);
+    color: var(--text-dark);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.step-number {
+    background-color: var(--text-dark);
+    color: var(--text-light);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    transition: background-color var(--transition-speed);
+}
+.step-card:hover .step-number, .step-card[aria-expanded="true"] .step-number {
+    background-color: var(--text-light);
+    color: var(--text-dark);
+}
+.step-title {
+    font-size: 1.25rem;
+    margin: 0;
+    font-family: var(--font-body);
+    font-weight: 700;
+}
+.step-description {
+    background-color: var(--bg-cream);
+    padding: 1rem;
+    border-radius: var(--border-radius-md);
+    margin-top: 1rem;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Questionnaire Form */
+.custom-form {
+    border: 1px solid var(--global-main-light);
+}
+.form-check-input:checked {
+    background-color: var(--global-main-dark);
+    border-color: var(--global-main-dark);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+    }
+    .custom-card {
+        padding: 1rem;
+    }
+}

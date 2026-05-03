@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>איך מצביעים בישראל?</title>
+    <!-- Bootstrap CSS Local -->
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="container h-100 d-flex align-items-center py-5">
+            <div class="row w-100 align-items-center">
+                <div class="col-lg-6 hero-text text-center text-lg-start mb-5 mb-lg-0 pe-lg-5">
+                    <h1 class="hero-title">מצביעים בפעם הראשונה?<br>זה יותר פשוט ממה שנראה</h1>
+                    <h2 class="hero-subtitle mt-3">פשוט. ברור. בלי פוליטיקה.</h2>
+                    <p class="hero-description mt-4">לא בטוחים איך מצביעים בישראל? כאן תמצאו הסבר פשוט שלב־אחר־שלב
+                        שיעזור לכם להבין בדיוק מה לעשות.</p>
+                    <a href="#how-to" class="btn btn-custom btn-lg mt-4" aria-label="למד איך זה עובד">איך זה עובד</a>
+                </div>
+                <div class="col-lg-6 hero-image-container text-center">
+                    <img src="pic.jpeg" alt="" aria-hidden="true" class="img-fluid rounded-4 shadow-lg hero-image">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Why it's important (Vanilla JS Carousel) -->
+    <section class="why-vote py-5 bg-cream" id="why-vote">
+        <div class="container text-center">
+            <h2 class="section-title mb-5">למה בכלל להצביע?</h2>
+
+            <div class="custom-carousel" aria-roledescription="carousel" aria-label="סיבות להצביע">
+                <div class="carousel-track-container">
+                    <ul class="carousel-track">
+                        <li class="carousel-slide current-slide">
+                            <div class="card custom-card mx-auto">
+                                <div class="card-body p-5">
+                                    <h3 class="card-title">אתם משפיעים על העתיד</h3>
+                                    <p class="card-text mt-3">כל קול חשוב. גם הקול שלכם הוא חלק מהתוצאה הסופית.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="carousel-slide">
+                            <div class="card custom-card mx-auto">
+                                <div class="card-body p-5">
+                                    <h3 class="card-title">אתם חלק מהמדינה</h3>
+                                    <p class="card-text mt-3">הצבעה היא דרך להרגיש שייכים ולהיות חלק מהחברה בישראל.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="carousel-slide">
+                            <div class="card custom-card mx-auto">
+                                <div class="card-body p-5">
+                                    <h3 class="card-title">זו זכות שלכם</h3>
+                                    <p class="card-text mt-3">כאזרחים – יש לכם את הזכות להשפיע. כדאי להשתמש בה.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="carousel-slide">
+                            <div class="card custom-card mx-auto">
+                                <div class="card-body p-5">
+                                    <h3 class="card-title">זה פשוט יותר ממה שחושבים</h3>
+                                    <p class="card-text mt-3">התהליך ברור, קצר, ולא דורש ידע מוקדם.</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="carousel-controls mt-4">
+                    <button class="carousel-btn carousel-btn-prev" aria-label="הקודם">
+                        <span aria-hidden="true">&#10095;</span>
+                    </button>
+                    <div class="carousel-nav" aria-label="בחירת שקופית">
+                        <button class="carousel-indicator current-indicator" aria-label="שקופית 1"
+                            aria-current="true"></button>
+                        <button class="carousel-indicator" aria-label="שקופית 2"></button>
+                        <button class="carousel-indicator" aria-label="שקופית 3"></button>
+                        <button class="carousel-indicator" aria-label="שקופית 4"></button>
+                    </div>
+                    <button class="carousel-btn carousel-btn-next" aria-label="הבא">
+                        <span aria-hidden="true">&#10094;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to vote (Interactive Infographic) -->
+    <section class="how-to-vote py-5" id="how-to">
+        <div class="container text-center">
+            <h2 class="section-title mb-5">איך מצביעים? צעד אחרי צעד</h2>
+            <div class="row g-4 justify-content-center">
+                <!-- Step 1 -->
+                <div class="col-lg-3 col-md-6">
+                    <button class="step-card w-100" aria-expanded="false" aria-controls="step1-desc">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">מוצאים קלפי</h3>
+                    </button>
+                    <div id="step1-desc" class="step-description hidden" aria-hidden="true">
+                        אפשר לבדוק באינטרנט לפי כתובת מגורים.
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="col-lg-3 col-md-6">
+                    <button class="step-card w-100" aria-expanded="false" aria-controls="step2-desc">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">מגיעים עם תעודה מזהה</h3>
+                    </button>
+                    <div id="step2-desc" class="step-description hidden" aria-hidden="true">
+                        תעודת זהות / דרכון ישראלי.
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="col-lg-3 col-md-6">
+                    <button class="step-card w-100" aria-expanded="false" aria-controls="step3-desc">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">מקבלים מעטפה ופתק</h3>
+                    </button>
+                    <div id="step3-desc" class="step-description hidden" aria-hidden="true">
+                        בוחרים פתק אחד ומכניסים למעטפה.
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="col-lg-3 col-md-6">
+                    <button class="step-card w-100" aria-expanded="false" aria-controls="step4-desc">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">מכניסים לקלפי</h3>
+                    </button>
+                    <div id="step4-desc" class="step-description hidden" aria-hidden="true">
+                        שמים את המעטפה בתיבה — וזהו!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mini Interactive (Questionnaire) -->
+    <section class="questionnaire py-5 bg-green" id="quiz">
+        <div class="container">
+            <h2 class="section-title text-center text-white mb-5">מוכנים להצביע?</h2>
+            <form id="readiness-form" class="custom-form mx-auto bg-white p-5 rounded-4 shadow-sm"
+                style="max-width: 600px;">
+
+                <fieldset class="mb-4 border-0 p-0">
+                    <legend class="h5 mb-3 fw-bold">1. האם יש לכם תעודה מזהה?</legend>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="q1" id="q1-yes" value="yes" required>
+                        <label class="form-check-label" for="q1-yes">כן</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="q1" id="q1-no" value="no">
+                        <label class="form-check-label" for="q1-no">לא</label>
+                    </div>
+                </fieldset>
+
+                <fieldset class="mb-4 border-0 p-0">
+                    <legend class="h5 mb-3 fw-bold">2. האם אתם יודעים איפה הקלפי שלכם?</legend>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="q2" id="q2-yes" value="yes" required>
+                        <label class="form-check-label" for="q2-yes">כן</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="q2" id="q2-no" value="no">
+                        <label class="form-check-label" for="q2-no">לא</label>
+                    </div>
+                </fieldset>
+
+                <fieldset class="mb-4 border-0 p-0">
+                    <legend class="h5 mb-3 fw-bold">3. האם אתם מתכננים להגיע ביום הבחירות?</legend>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="q3" id="q3-yes" value="yes" required>
+                        <label class="form-check-label" for="q3-yes">כן</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="q3" id="q3-no" value="no">
+                        <label class="form-check-label" for="q3-no">לא</label>
+                    </div>
+                </fieldset>
+
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn btn-custom btn-lg w-100">בדוק מוכנות</button>
+                </div>
+            </form>
+
+            <div id="quiz-result" class="mt-4 text-center hidden" aria-live="polite">
+                <div class="result-message p-4 bg-white rounded-3 shadow-sm d-inline-block">
+                    <h3 class="fw-bold mb-0" id="result-text"></h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer bg-dark text-white py-5 text-center">
+        <div class="container">
+            <p class="h3 font-playfair mb-3">הקול שלכם חשוב 🇮🇱</p>
+            <p class="mb-4 fs-5 text-light">השתתפות בבחירות היא חלק מהחיים האזרחיים בישראל</p>
+            <div class="footer-links d-flex justify-content-center gap-4 flex-wrap mt-4">
+                <a href="https://www.gov.il/he/departments/topics/elections" target="_blank" rel="noopener noreferrer"
+                    class="text-white text-decoration-underline" aria-label="קישור לבדיקת קלפי (נפתח בחלון חדש)">בדיקת
+                    קלפי</a>
+                <span class="text-white">תאריך הבחירות: טרם נקבע</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Vanilla JS -->
+    <script src="script.js"></script>
+</body>
+
+</html>
