@@ -175,4 +175,21 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDots(currentDot, targetDot);
         });
     }
+
+    // --- 4. Navbar Toggle Logic ---
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    const mainNav = document.getElementById('mainNav');
+
+    if (navbarToggler && mainNav) {
+        navbarToggler.addEventListener('click', () => {
+            const isExpanded = navbarToggler.getAttribute('aria-expanded') === 'true';
+            if (isExpanded) {
+                navbarToggler.setAttribute('aria-expanded', 'false');
+                mainNav.classList.remove('show');
+            } else {
+                navbarToggler.setAttribute('aria-expanded', 'true');
+                mainNav.classList.add('show');
+            }
+        });
+    }
 });
