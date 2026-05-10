@@ -74,9 +74,10 @@ h6,
 .btn-custom:hover,
 .btn-custom:focus {
     background-color: var(--global-main-dark);
-    color: var(--text-light);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: var(--text-dark);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Section Titles */
@@ -207,7 +208,9 @@ h6,
 
 .carousel-btn:hover {
     background: var(--global-main-dark);
-    color: var(--text-light);
+    color: var(--text-dark);
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .carousel-nav {
@@ -341,12 +344,15 @@ h6,
 }
 
 .nav-link {
-    transition: color var(--transition-speed);
+    transition: all var(--transition-speed);
+    display: inline-block; /* Required for transform scale */
 }
 
 .nav-link:hover,
 .nav-link:focus {
-    color: var(--text-light) !important;
+    color: var(--text-dark) !important;
+    transform: scale(1.1);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .custom-toggler:focus {
