@@ -1,35 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. Interactive Infographic Logic ---
-    const stepCards = document.querySelectorAll('.step-card');
+    // --- 1. Interactive Infographic Logic (Flip Cards) ---
+    const flipCards = document.querySelectorAll('.flip-card-container');
     
-    stepCards.forEach(card => {
-        card.addEventListener('click', () => {
-            const isExpanded = card.getAttribute('aria-expanded') === 'true';
-            const controlId = card.getAttribute('aria-controls');
-            const description = document.getElementById(controlId);
+    flipCards.forEach(card => {
+        const toggleFlip = () => {
+            const isFlipped = card.classList.contains('flipped');
             
-            // Close all other steps
-            stepCards.forEach(otherCard => {
-                if (otherCard !== card) {
-                    otherCard.setAttribute('aria-expanded', 'false');
-                    const otherDesc = document.getElementById(otherCard.getAttribute('aria-controls'));
-                    if (otherDesc) {
-                        otherDesc.classList.add('hidden');
-                        otherDesc.setAttribute('aria-hidden', 'true');
-                    }
-                }
-            });
-
-            // Toggle current step
-            if (!isExpanded) {
-                card.setAttribute('aria-expanded', 'true');
-                description.classList.remove('hidden');
-                description.setAttribute('aria-hidden', 'false');
+            if (!isFlipped) {
+                card.classList.add('flipped');
             } else {
-                card.setAttribute('aria-expanded', 'false');
-                description.classList.add('hidden');
-                description.setAttribute('aria-hidden', 'true');
+                card.classList.remove('flipped');
+            }
+        };
+
+        card.addEventListener('click', toggleFlip);
+
+        // Keyboard accessibility
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleFlip();
             }
         });
     });

@@ -25,8 +25,6 @@ body {
     line-height: 1.6;
 }
 
-h1 {}
-
 h1,
 h2,
 h3,
@@ -233,28 +231,68 @@ h6,
     transform: scale(1.2);
 }
 
-/* How to vote (Infographic) */
-.step-card {
+/* How to vote (Interactive Flip Cards) */
+.flip-card-container {
+    perspective: 1000px;
+    height: 100%;
+    min-height: 280px;
+    outline: none;
+}
+
+.flip-card-inner {
+    display: grid;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.flip-card-container.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-container:hover .flip-card-inner {
+    transform: translateY(-5px);
+}
+
+.flip-card-container.flipped:hover .flip-card-inner {
+    transform: rotateY(180deg) translateY(-5px);
+}
+
+.flip-card-front,
+.flip-card-back {
+    grid-area: 1 / 1;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     background-color: var(--text-light);
     border: 2px solid var(--global-main-light);
     border-radius: var(--border-radius-lg);
     padding: 2rem 1rem;
     text-align: center;
-    cursor: pointer;
-    transition: all var(--transition-speed);
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
+    justify-content: center;
+    transition: all var(--transition-speed);
 }
 
-.step-card:hover,
-.step-card[aria-expanded="true"] {
-    background-color: var(--global-main-color);
+.flip-card-back {
+    transform: rotateY(180deg);
+    background-color: var(--bg-cream);
+}
+
+.flip-card-container:hover .flip-card-front,
+.flip-card-container:hover .flip-card-back {
     border-color: var(--global-main-color);
-    color: var(--text-dark);
-    transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.flip-card-container:hover .flip-card-front {
+    background-color: var(--global-main-color);
+}
+
+.flip-card-container.flipped:hover .flip-card-back {
+    background-color: var(--global-main-color);
 }
 
 .step-number {
@@ -272,8 +310,7 @@ h6,
     transition: background-color var(--transition-speed);
 }
 
-.step-card:hover .step-number,
-.step-card[aria-expanded="true"] .step-number {
+.flip-card-container:hover .step-number {
     background-color: var(--text-light);
     color: var(--text-dark);
 }
@@ -283,12 +320,6 @@ h6,
     margin: 0;
     font-family: var(--font-body);
     font-weight: 700;
-}
-
-.step-description {
-    background-color: var(--bg-cream);
-    border-radius: var(--border-radius-md);
-    animation: fadeIn 0.3s ease-in-out;
 }
 
 /* Questionnaire Form */
@@ -345,7 +376,8 @@ h6,
 
 .nav-link {
     transition: all var(--transition-speed);
-    display: inline-block; /* Required for transform scale */
+    display: inline-block;
+    /* Required for transform scale */
 }
 
 .nav-link:hover,
