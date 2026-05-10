@@ -303,7 +303,10 @@
             <div id="feedback-icon" class="text-6xl mb-4"></div>
             <h3 id="feedback-title" class="text-2xl font-bold mb-4"></h3>
             <p id="feedback-msg" class="text-gray-600 mb-8"></p>
-            <button id="feedback-btn" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold"></button>
+            <div class="flex gap-4">
+                <button id="feedback-btn" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold transition hover:bg-blue-700"></button>
+                <button id="feedback-btn-secondary" class="bg-gray-200 text-gray-800 px-8 py-3 rounded-xl font-bold hidden transition hover:bg-gray-300"></button>
+            </div>
         </div>
 
     </main>
@@ -354,9 +357,11 @@
             const msg = document.getElementById('feedback-msg');
             const icon = document.getElementById('feedback-icon');
             const btn = document.getElementById('feedback-btn');
+            const btnSec = document.getElementById('feedback-btn-secondary');
 
             feedback.classList.remove('hidden');
             feedback.classList.add('flex');
+            btnSec.classList.add('hidden');
 
             if (isValid) {
                 icon.innerText = "✅";
@@ -438,9 +443,11 @@
             const msg = document.getElementById('feedback-msg');
             const icon = document.getElementById('feedback-icon');
             const btn = document.getElementById('feedback-btn');
+            const btnSec = document.getElementById('feedback-btn-secondary');
 
             feedback.classList.remove('hidden');
             feedback.classList.add('flex');
+            btnSec.classList.add('hidden'); // Default hidden
 
             // Rules Logic
             if (selectedSlips.length > 2) {
@@ -467,11 +474,21 @@
                 icon.innerText = "⚪";
                 title.innerText = "פתק לבן";
                 msg.innerText = "הצבעה בפתק לבן ריק אינה נחשבת כקול תקף למפלגה במניין הקולות. אם רצית להצביע למפלגה והפתק חסר, עליך לכתוב את שם המפלגה על הפתק.";
-                btn.innerText = "הבנתי, אמשיך";
+                
+                btn.innerText = "המשך (הצבע בפתק לבן)";
+                btnSec.innerText = "חזור אחורה (שנה בחירה)";
+                btnSec.classList.remove('hidden');
+
                 btn.onclick = () => {
                     feedback.classList.add('hidden');
                     feedback.classList.remove('flex');
                     nextStep();
+                };
+                
+                btnSec.onclick = () => {
+                    feedback.classList.add('hidden');
+                    feedback.classList.remove('flex');
+                    resetEnvelope();
                 };
             } else {
                 icon.innerText = "🗳️";
