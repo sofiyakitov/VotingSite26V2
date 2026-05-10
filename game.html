@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סימולטור הצבעה אינטראקטיבי</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: flex;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-option {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .voting-slip {
+            width: 80px;
+            height: 110px;
+            background: white;
+            border: 1px solid #cbd5e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+            padding: 5px;
+        }
+
+        .voting-slip:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope {
+            width: 140px;
+            height: 100px;
+            background: #4a5568;
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .envelope.blue { background-color: #3182ce; }
+        .envelope.active-drop { transform: scale(1.1); border: 2px dashed #ffffff; }
+
+        .progress-bar {
+            height: 6px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .pulse {
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0px rgba(66, 153, 225, 0.4); }
+            100% { box-shadow: 0 0 0 20px rgba(66, 153, 225, 0); }
+        }
+
+        .slip-in-envelope {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            background: white;
+            top: 20%;
+            left: 35%;
+            animation: slideInEnvelope 0.5s ease-out;
+            border: 1px solid #ddd;
+        }
+
+        @keyframes slideInEnvelope {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        #ballot-box {
+            perspective: 1000px;
+        }
+
+        .ballot-box-visual {
+            width: 200px;
+            height: 180px;
+            background: #2b6cb0;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .ballot-slot {
+            width: 100px;
+            height: 10px;
+            background: #1a365d;
+            margin: 0 auto;
+            position: relative;
+            top: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4">
+
+    <!-- Header & Progress -->
+    <div class="w-full max-w-2xl mb-8">
+        <div class="flex justify-between items-center mb-2">
+            <span id="step-title" class="text-gray-600 font-bold">ברוכים הבאים</span>
+            <span id="step-indicator" class="text-blue-600 font-bold">1 / 5</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+            <div id="progress" class="bg-blue-600 progress-bar" style="width: 20%"></div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main id="app" class="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden">
+        
+        <!-- Step 1: Welcome -->
+        <section id="step-1" class="step-content active flex-col items-center text-center">
+            <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6 text-4xl">🗳️</div>
+            <h1 class="text-4xl font-black text-gray-800 mb-4">ברוכים הבאים לקלפי</h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-md">
+                היום נלמד איך לממש את הזכות הדמוקרטית שלכם בצורה נכונה ופשוטה. מוכנים להתחיל?
+            </p>
+            <button onclick="nextStep()" class="bg-blue-600 hover:bg-blue-700 text-white text-xl font-bold py-4 px-12 rounded-2xl shadow-lg transition transform hover:scale-105 active:scale-95 pulse">
+                מתחילים
+            </button>
+        </section>
+
+        <!-- Step 2: Identification -->
+        <section id="step-2" class="step-content flex-col items-center w-full">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">שלב 1: הזדהות</h2>
+            <p class="text-gray-600 mb-8 text-center">כדי להצביע, עליכם להזדהות בפני ועדת הקלפי. איזה מסמך תציגו?</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 w-full">
+                <button onclick="checkID(true, 'תעודת זהות')" class="card-option p-6 border-2 border-gray-100 rounded-2xl flex flex-col items-center gap-3">
+                    <span class="text-4xl">🆔</span>
+                    <span class="font-bold">תעודת זהות</span>
+                </button>
+                <button onclick="checkID(false, 'תעודת עולה')" class="card-option p-6 border-2 border-gray-100 rounded-2xl flex flex-col items-center gap-3">
+                    <span class="text-4xl">📜</span>
+                    <span class="font-bold">תעודת עולה</span>
+                </button>
+                <button onclick="checkID(true, 'רישיון נהיגה')" class="card-option p-6 border-2 border-gray-100 rounded-2xl flex flex-col items-center gap-3">
+                    <span class="text-4xl">🚗</span>
+                    <span class="font-bold">רישיון נהיגה</span>
+                </button>
+                <button onclick="checkID(false, 'דרכון זר')" class="card-option p-6 border-2 border-gray-100 rounded-2xl flex flex-col items-center gap-3">
+                    <span class="text-4xl">🌍</span>
+                    <span class="font-bold">דרכון זר</span>
+                </button>
+                <button onclick="checkID(true, 'דרכון ישראלי')" class="card-option p-6 border-2 border-gray-100 rounded-2xl flex flex-col items-center gap-3">
+                    <span class="text-4xl">🇮🇱</span>
+                    <span class="font-bold">דרכון ישראלי</span>
+                </button>
+                <button onclick="checkID(false, 'כרטיס סטודנט')" class="card-option p-6 border-2 border-gray-100 rounded-2xl flex flex-col items-center gap-3">
+                    <span class="text-4xl">🎓</span>
+                    <span class="font-bold">כרטיס סטודנט</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Step 3: Explanation -->
+        <section id="step-3" class="step-content flex-col items-center text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">קבלת המעטפה</h2>
+            <p class="text-gray-600 mb-4 max-w-md">מעולה! עכשיו חבר הוועדה ייתן לכם מעטפה רשמית חתומה. שימו לב שהיא ריקה ותקינה.</p>
+            
+            <p class="text-blue-600 text-sm mb-8 bg-blue-50 p-3 rounded-lg border border-blue-100 italic">
+                * במידת הצורך, מותר להגיע עם מלווה שהוא קרוב משפחה.
+            </p>
+
+            <div class="flex gap-8 items-end mb-12">
+                <div class="flex flex-col items-center gap-2">
+                    <div class="envelope blue w-32 h-20 shadow-md">
+                        <div class="border border-white/30 w-full h-full m-2"></div>
+                    </div>
+                    <span class="text-sm font-bold text-blue-700">מעטפת בחירות</span>
+                </div>
+                <div class="flex flex-col items-center gap-2">
+                    <div class="w-16 h-24 bg-white border border-gray-200 shadow-sm flex flex-col p-1">
+                        <div class="h-1/4 w-full bg-gray-100"></div>
+                        <div class="mt-auto text-[8px] font-bold">שם המפלגה</div>
+                    </div>
+                    <span class="text-sm font-bold text-gray-600">פתקי הצבעה</span>
+                </div>
+            </div>
+
+            <button onclick="nextStep()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-xl transition">
+                נכנסים לפרגוד
+            </button>
+        </section>
+
+        <!-- Step 4: The Booth (Interactive) -->
+        <section id="step-4" class="step-content flex-col items-center w-full">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">מאחורי הפרגוד</h2>
+            <p class="text-gray-600 mb-4 text-center">בחרו פתק וגררו אותו למעטפה:</p>
+            
+            <div class="w-full bg-yellow-50 p-3 rounded-lg mb-6 text-sm text-yellow-800 border border-yellow-100">
+                * אם הפתק של המפלגה שאליה רצית להצביע חסר, ניתן לכתוב את שם המפלגה על פתק לבן.
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 items-center justify-around w-full">
+                <!-- Slip Tray -->
+                <div class="grid grid-cols-3 gap-3 bg-gray-50 p-4 rounded-2xl border border-gray-200">
+                    <div class="voting-slip" draggable="true" ondragstart="drag(event)" id="slip-1">שם המפלגה א'</div>
+                    <div class="voting-slip" draggable="true" ondragstart="drag(event)" id="slip-2">שם המפלגה ב'</div>
+                    <div class="voting-slip" draggable="true" ondragstart="drag(event)" id="slip-3">שם המפלגה ג'</div>
+                    <div class="voting-slip" draggable="true" ondragstart="drag(event)" id="slip-4">שם המפלגה ד'</div>
+                    <div class="voting-slip" draggable="true" ondragstart="drag(event)" id="slip-5">שם המפלגה ה'</div>
+                    <!-- White Slip -->
+                    <div class="voting-slip border-dashed border-gray-400 text-gray-400" draggable="true" ondragstart="drag(event)" id="slip-white">פתק לבן</div>
+                </div>
+
+                <!-- Active Envelope -->
+                <div class="flex flex-col items-center gap-4">
+                    <div id="drop-zone" class="envelope blue w-48 h-32 text-xl shadow-xl" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        <span id="envelope-status">גררו לכאן</span>
+                    </div>
+                    <button id="finish-booth" onclick="validateVote()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl opacity-50 cursor-not-allowed transition" disabled>
+                        סיימתי וסגרתי
+                    </button>
+                    <button onclick="resetEnvelope()" class="text-blue-600 text-sm hover:underline">רוקן מעטפה והתחל מחדש</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 5: The Ballot Box -->
+        <section id="step-5" class="step-content flex-col items-center w-full">
+            <h2 class="text-2xl font-bold text-gray-800 mb-8">השלב האחרון: הקלפי</h2>
+            <p class="text-gray-600 mb-12">הניחו את המעטפה בתוך הקלפי:</p>
+
+            <div id="ballot-box" class="flex flex-col items-center gap-12">
+                <div id="final-envelope" class="envelope blue w-32 h-20 cursor-pointer hover:-translate-y-4 transition-transform shadow-lg" onclick="castVote()">
+                    <span>מעטפה סגורה</span>
+                </div>
+                
+                <div class="ballot-box-visual">
+                    <div class="ballot-slot"></div>
+                    <div class="absolute inset-x-0 bottom-4 text-center text-white/50 font-bold text-2xl uppercase">קלפי</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Screen -->
+        <section id="step-6" class="step-content flex-col items-center text-center">
+            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 text-5xl">✅</div>
+            <h1 class="text-4xl font-black text-gray-800 mb-4">כל הכבוד!</h1>
+            <h2 class="text-2xl text-blue-600 font-bold mb-4">סיימתם את תהליך ההצבעה בהצלחה</h2>
+            <p class="text-gray-600 mb-8 max-w-md">
+                עכשיו אתם יודעים בדיוק איך מצביעים. <br>
+                זכרו: ההצבעה היא חשאית, אישית וחשובה מאוד לעתיד המדינה.
+            </p>
+            
+            <div class="bg-blue-50 p-6 rounded-2xl mb-8 text-right w-full">
+                <h3 class="font-bold text-blue-800 mb-2">סיכום החוקים שלמדנו:</h3>
+                <ul class="text-sm text-blue-700 space-y-2 list-disc list-inside">
+                    <li>שני פתקים זהים במעטפה נחשבים כקול תקין (אך נספרים כקול אחד).</li>
+                    <li>יותר משני פתקים במעטפה פוסלים את הקול.</li>
+                    <li>פתק לבן ריק אינו נחשב כקול תקף למפלגה.</li>
+                    <li>מותר להגיע עם מלווה קרוב משפחה במידת הצורך.</li>
+                </ul>
+            </div>
+
+            <button onclick="restart()" class="text-gray-500 hover:text-blue-600 font-bold transition">
+                נסו שוב (אימון נוסף)
+            </button>
+        </section>
+
+        <!-- Feedback Overlay -->
+        <div id="feedback" class="absolute inset-0 bg-white/95 z-50 hidden flex-col items-center justify-center p-8 text-center animate-fadeIn">
+            <div id="feedback-icon" class="text-6xl mb-4"></div>
+            <h3 id="feedback-title" class="text-2xl font-bold mb-4"></h3>
+            <p id="feedback-msg" class="text-gray-600 mb-8"></p>
+            <button id="feedback-btn" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold"></button>
+        </div>
+
+    </main>
+
+    <footer class="mt-8 text-gray-400 text-sm">
+        סימולטור חינוכי להמחשת הליך הבחירות | שמרו על הדמוקרטיה
+    </footer>
+
+    <script>
+        let currentStep = 1;
+        let selectedSlips = [];
+        const totalSteps = 5;
+
+        const titles = [
+            "ברוכים הבאים",
+            "שלב ההזדהות",
+            "הכנה להצבעה",
+            "בתוך הפרגוד",
+            "הצבעה בקלפי"
+        ];
+
+        function updateUI() {
+            document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+            const currentEl = document.getElementById(`step-${currentStep}`);
+            if (currentEl) currentEl.classList.add('active');
+
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progress').style.width = `${progress}%`;
+            document.getElementById('step-indicator').innerText = `${Math.min(currentStep, 5)} / ${totalSteps}`;
+            document.getElementById('step-title').innerText = titles[currentStep-1] || "הושלם";
+        }
+
+        function nextStep() {
+            currentStep++;
+            updateUI();
+        }
+
+        function restart() {
+            currentStep = 1;
+            selectedSlips = [];
+            resetEnvelope();
+            updateUI();
+        }
+
+        function checkID(isValid, name) {
+            const feedback = document.getElementById('feedback');
+            const title = document.getElementById('feedback-title');
+            const msg = document.getElementById('feedback-msg');
+            const icon = document.getElementById('feedback-icon');
+            const btn = document.getElementById('feedback-btn');
+
+            feedback.classList.remove('hidden');
+            feedback.classList.add('flex');
+
+            if (isValid) {
+                icon.innerText = "✅";
+                title.innerText = "מעולה!";
+                msg.innerText = `${name} הוא מסמך מזהה תקף להצבעה. אפשר להמשיך.`;
+                btn.innerText = "המשך לשלב הבא";
+                btn.onclick = () => {
+                    feedback.classList.add('hidden');
+                    feedback.classList.remove('flex');
+                    nextStep();
+                };
+            } else {
+                icon.innerText = "❌";
+                title.innerText = "מסמך לא תקף";
+                let reason = "";
+                if (name === "תעודת עולה") reason = "תעודת עולה אינה נחשבת למסמך מזהה רשמי ביום הבחירות. השתמשו בתעודת זהות.";
+                if (name === "דרכון זר") reason = "רק בעלי אזרחות ישראלית יכולים להצביע, ולכן יש להשתמש בדרכון ישראלי בלבד.";
+                if (name === "כרטיס סטודנט") reason = "כרטיס סטודנט אינו מסמך זיהוי ממשלתי רשמי התקף לבחירות.";
+                
+                msg.innerText = reason;
+                btn.innerText = "נסה שוב";
+                btn.onclick = () => {
+                    feedback.classList.add('hidden');
+                    feedback.classList.remove('flex');
+                };
+            }
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            document.getElementById('drop-zone').classList.add('active-drop');
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            document.getElementById('drop-zone').classList.remove('active-drop');
+            const id = ev.dataTransfer.getData("text");
+            const slip = document.getElementById(id);
+            
+            selectedSlips.push({
+                id: id,
+                text: slip.innerText,
+                isWhite: id === 'slip-white'
+            });
+
+            const status = document.getElementById('envelope-status');
+            const btn = document.getElementById('finish-booth');
+            
+            const miniSlip = document.createElement('div');
+            miniSlip.className = 'slip-in-envelope';
+            document.getElementById('drop-zone').appendChild(miniSlip);
+
+            if (selectedSlips.length === 1) {
+                status.innerText = "פתק בפנים";
+            } else {
+                status.innerText = `${selectedSlips.length} פתקים`;
+            }
+
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        function resetEnvelope() {
+            selectedSlips = [];
+            const dz = document.getElementById('drop-zone');
+            dz.innerHTML = '<span id="envelope-status">גררו לכאן</span>';
+            const btn = document.getElementById('finish-booth');
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        function validateVote() {
+            const feedback = document.getElementById('feedback');
+            const title = document.getElementById('feedback-title');
+            const msg = document.getElementById('feedback-msg');
+            const icon = document.getElementById('feedback-icon');
+            const btn = document.getElementById('feedback-btn');
+
+            feedback.classList.remove('hidden');
+            feedback.classList.add('flex');
+
+            // Rules Logic
+            if (selectedSlips.length > 2) {
+                icon.innerText = "⚠️";
+                title.innerText = "קול פסול!";
+                msg.innerText = "שמתם יותר משני פתקים במעטפה. במקרה כזה, ההצבעה נפסלת לחלוטין. מותר לשים עד שני פתקים זהים בלבד.";
+                btn.innerText = "הבנתי, אתקן";
+                btn.onclick = () => {
+                    feedback.classList.add('hidden');
+                    feedback.classList.remove('flex');
+                    resetEnvelope();
+                };
+            } else if (selectedSlips.length === 2 && selectedSlips[0].text !== selectedSlips[1].text) {
+                icon.innerText = "⚠️";
+                title.innerText = "קול פסול!";
+                msg.innerText = "שמתם שני פתקים של מפלגות שונות. זה גורם לפסילת הקול. רק שני פתקים זהים נחשבים כקול תקין.";
+                btn.innerText = "הבנתי, אתקן";
+                btn.onclick = () => {
+                    feedback.classList.add('hidden');
+                    feedback.classList.remove('flex');
+                    resetEnvelope();
+                };
+            } else if (selectedSlips.length === 1 && selectedSlips[0].isWhite) {
+                icon.innerText = "⚪";
+                title.innerText = "פתק לבן";
+                msg.innerText = "הצבעה בפתק לבן ריק אינה נחשבת כקול תקף למפלגה במניין הקולות. אם רצית להצביע למפלגה והפתק חסר, עליך לכתוב את שם המפלגה על הפתק.";
+                btn.innerText = "הבנתי, אמשיך";
+                btn.onclick = () => {
+                    feedback.classList.add('hidden');
+                    feedback.classList.remove('flex');
+                    nextStep();
+                };
+            } else {
+                icon.innerText = "🗳️";
+                title.innerText = "מצוין!";
+                const countMsg = selectedSlips.length === 2 ? "הכנסתם שני פתקים זהים. זהו קול תקין שייחשב כקול אחד למפלגה." : "הכנסתם פתק אחד תקין.";
+                msg.innerText = countMsg;
+                btn.innerText = "צא מהפרגוד לקלפי";
+                btn.onclick = () => {
+                    feedback.classList.add('hidden');
+                    feedback.classList.remove('flex');
+                    nextStep();
+                };
+            }
+        }
+
+        function castVote() {
+            const env = document.getElementById('final-envelope');
+            env.style.transition = "all 1s cubic-bezier(0.5, 0, 0.5, 1)";
+            env.style.transform = "translateY(150px) scale(0.1)";
+            env.style.opacity = "0";
+
+            setTimeout(() => {
+                nextStep();
+            }, 1200);
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
