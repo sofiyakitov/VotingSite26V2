@@ -40,7 +40,7 @@
                         <a class="nav-link fw-bold text-dark" href="#how-to">איך מצביעים</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-dark" href="#quiz">בדיקה עצמית</a>
+                        <a class="nav-link fw-bold text-dark" href="#simulator">סימולטור הבחירות</a>
                     </li>
                 </ul>
             </div>
@@ -246,60 +246,35 @@
         </div>
     </section>
 
-    <!-- Mini Interactive (Questionnaire) -->
-    <section class="questionnaire py-5 bg-green" id="quiz">
+    <!-- Elections Simulator -->
+    <section class="simulator-section py-5 bg-green" id="simulator" aria-label="סימולטור הבחירות">
         <div class="container">
-            <div class="text-center">
-                <h2 class="section-title text-black mb-5">מוכנים להצביע?</h2>
+            <div class="text-center mb-5">
+                <h2 class="section-title text-black">סימולטור הבחירות</h2>
+                <p class="fs-5 text-dark mt-3">נסו בעצמכם – עברו את תהליך ההצבעה צעד אחרי צעד</p>
             </div>
-            <form id="readiness-form" class="custom-form mx-auto bg-white p-5 rounded-4 shadow-sm"
-                style="max-width: 600px;">
 
-                <fieldset class="mb-4 border-0 p-0">
-                    <legend class="h5 mb-3 fw-bold">1. האם יש לכם תעודה מזהה?</legend>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="q1" id="q1-yes" value="yes" required>
-                        <label class="form-check-label" for="q1-yes">כן</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="q1" id="q1-no" value="no">
-                        <label class="form-check-label" for="q1-no">לא</label>
-                    </div>
-                </fieldset>
-
-                <fieldset class="mb-4 border-0 p-0">
-                    <legend class="h5 mb-3 fw-bold">2. האם אתם יודעים איפה הקלפי שלכם?</legend>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="q2" id="q2-yes" value="yes" required>
-                        <label class="form-check-label" for="q2-yes">כן</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="q2" id="q2-no" value="no">
-                        <label class="form-check-label" for="q2-no">לא</label>
-                    </div>
-                </fieldset>
-
-                <fieldset class="mb-4 border-0 p-0">
-                    <legend class="h5 mb-3 fw-bold">3. האם אתם מתכננים להגיע ביום הבחירות?</legend>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="q3" id="q3-yes" value="yes" required>
-                        <label class="form-check-label" for="q3-yes">כן</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="q3" id="q3-no" value="no">
-                        <label class="form-check-label" for="q3-no">לא</label>
-                    </div>
-                </fieldset>
-
-                <div class="text-center mt-5">
-                    <button type="submit" class="btn btn-custom btn-lg w-100">בדוק מוכנות</button>
+            <!-- Iframe wrapper -->
+            <div class="simulator-wrapper" role="region" aria-label="סימולטור אינטראקטיבי">
+                <!-- Loading skeleton shown while iframe loads -->
+                <div class="simulator-skeleton" id="simulator-skeleton" aria-hidden="true">
+                    <div class="skeleton-bar skeleton-bar--short"></div>
+                    <div class="skeleton-bar skeleton-bar--long"></div>
+                    <div class="skeleton-bar skeleton-bar--medium"></div>
                 </div>
-            </form>
 
-            <div id="quiz-result" class="mt-4 text-center hidden" aria-live="polite">
-                <div class="result-message p-4 bg-white rounded-3 shadow-sm d-inline-block">
-                    <h3 class="fw-bold mb-0" id="result-text"></h3>
-                </div>
+                <iframe
+                    id="elections-simulator"
+                    src="game.html"
+                    title="סימולטור הבחירות האינטראקטיבי"
+                    class="simulator-iframe"
+                    loading="lazy"
+                    scrolling="no"
+                    frameborder="0"
+                    allowfullscreen
+                    aria-label="סימולטור הבחירות"
+                    onload="simulatorLoaded()"
+                ></iframe>
             </div>
         </div>
     </section>
@@ -320,6 +295,33 @@
 
     <!-- Custom Vanilla JS -->
     <script src="script.js"></script>
+
+    <!-- Simulator iframe loader -->
+    <script>
+        function simulatorLoaded() {
+            var skeleton = document.getElementById('simulator-skeleton');
+            var iframe   = document.getElementById('elections-simulator');
+
+            if (skeleton) {
+                skeleton.style.transition = 'opacity 0.4s ease';
+                skeleton.style.opacity    = '0';
+                setTimeout(function () { skeleton.style.display = 'none'; }, 420);
+            }
+
+            iframe.classList.add('simulator-iframe--ready');
+
+            /* Auto-height: poll the inner document height every 300 ms.
+               Works for same-origin iframes (game.html is local). */
+            function syncHeight() {
+                try {
+                    var h = iframe.contentDocument.documentElement.scrollHeight;
+                    if (h && h > 100) iframe.style.height = h + 'px';
+                } catch (e) { /* cross-origin guard — won't happen here */ }
+            }
+            syncHeight();
+            setInterval(syncHeight, 300);
+        }
+    </script>
 </body>
 
 </html>

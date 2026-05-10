@@ -376,14 +376,78 @@ h6,
     font-weight: 700;
 }
 
-/* Questionnaire Form */
-.custom-form {
-    border: 1px solid var(--global-main-light);
+/* Elections Simulator Section */
+.simulator-section {
+    /* inherits bg-green utility */
 }
 
-.form-check-input:checked {
-    background-color: var(--global-main-dark);
-    border-color: var(--global-main-dark);
+.simulator-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+    background: #fff;
+    /* prevents layout jump before iframe height is known */
+    min-height: 560px;
+}
+
+/* --- Loading skeleton --- */
+.simulator-skeleton {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+}
+
+.skeleton-bar {
+    height: 16px;
+    border-radius: 8px;
+    background: linear-gradient(
+        90deg,
+        var(--global-main-light) 25%,
+        #e8f0e6 50%,
+        var(--global-main-light) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite linear;
+}
+
+.skeleton-bar--short  { width: 40%; }
+.skeleton-bar--long   { width: 85%; }
+.skeleton-bar--medium { width: 62%; }
+
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* --- iframe --- */
+.simulator-iframe {
+    display: block;
+    width: 100%;
+    /* initial height — synced dynamically via JS */
+    height: 620px;
+    border: none;
+    border-radius: var(--border-radius-lg);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    /* prevent horizontal scroll bleed */
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.simulator-iframe--ready {
+    opacity: 1;
 }
 
 /* Animations */
@@ -407,6 +471,27 @@ h6,
 
     .custom-card {
         padding: 1rem;
+    }
+
+    .simulator-wrapper {
+        min-height: 480px;
+        border-radius: var(--border-radius-md);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .simulator-iframe {
+        height: 560px;
+        border-radius: var(--border-radius-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .simulator-wrapper {
+        min-height: 420px;
+    }
+
+    .simulator-iframe {
+        height: 500px;
     }
 }
 
