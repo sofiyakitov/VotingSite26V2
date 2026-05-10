@@ -1,17 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- 1. Interactive Infographic Logic (Flip Cards) ---
+
+    // --- 1. Interactive Infographic Logic (Cinematic Modal Flip Cards) ---
     const flipCards = document.querySelectorAll('.flip-card-container');
+    const howToVoteSection = document.querySelector('.how-to-vote');
+    const backdrop = document.getElementById('cards-backdrop');
     
+    let activeCard = null;
+
+    const closeActiveCard = () => {
+        if (!activeCard) return;
+
+        // Unflip first
+        activeCard.classList.remove('flipped');
+        
+        // Wait for unflip animation to finish (e.g. 300ms), then move back
+        setTimeout(() => {
+            if (activeCard) {
+                activeCard.style.transform = '';
+                activeCard.classList.remove('card-active');
+                if (howToVoteSection) howToVoteSection.classList.remove('has-active-card');
+                if (backdrop) backdrop.classList.remove('active');
+                document.body.style.overflow = '';
+                activeCard = null;
+            }
+        }, 300);
+    };
+
+    if (backdrop) {
+        backdrop.addEventListener('click', closeActiveCard);
+    }
+
     flipCards.forEach(card => {
         const toggleFlip = () => {
-            const isFlipped = card.classList.contains('flipped');
-            
-            if (!isFlipped) {
-                card.classList.add('flipped');
-            } else {
-                card.classList.remove('flipped');
+            // If clicking the currently active card, close it
+            if (activeCard === card) {
+                closeActiveCard();
+                return;
             }
+
+            // Ignore clicks if another card is currently active
+            if (activeCard && activeCard !== card) {
+                return;
+            }
+
+            // Activate new card
+            activeCard = card;
+            
+            // Calculate center position
+            const rect = card.getBoundingClientRect();
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const cardCenterX = rect.left + rect.width / 2;
+            const cardCenterY = rect.top + rect.height / 2;
+            
+            const translateX = centerX - cardCenterX;
+            const translateY = centerY - cardCenterY;
+
+            // Apply classes and styles
+            card.classList.add('card-active');
+            if (howToVoteSection) howToVoteSection.classList.add('has-active-card');
+            if (backdrop) backdrop.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Lock scroll
+            
+            // Move to center with 2.5x scale
+            card.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(2.5)`;
+
+            // Wait for move transition to finish, then flip
+            setTimeout(() => {
+                if (activeCard === card) {
+                    card.classList.add('flipped');
+                }
+            }, 600); // Wait for the 0.6s transform transition
         };
 
         card.addEventListener('click', toggleFlip);
@@ -21,6 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 toggleFlip();
+            } else if (e.key === 'Escape' && activeCard) {
+                closeActiveCard();
             }
         });
     });
@@ -33,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             // Get values from form
             const q1 = form.querySelector('input[name="q1"]:checked');
             const q2 = form.querySelector('input[name="q2"]:checked');
@@ -55,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             resultContainer.classList.remove('hidden');
-            
+
             // Scroll to result slightly
             resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         });
@@ -86,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 slide.style.left = newWidth * index + 'px';
             });
             const currentSlide = track.querySelector('.current-slide');
-            track.style.transform = 'translateX(' + (-currentSlide.style.left.replace('px','') * 1) + 'px)'; // RTL: actually in RTL we might move positive, wait.
+            track.style.transform = 'translateX(' + (-currentSlide.style.left.replace('px', '') * 1) + 'px)'; // RTL: actually in RTL we might move positive, wait.
         });
 
         const moveToSlide = (track, currentSlide, targetSlide) => {
@@ -99,13 +160,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // The first child is on the right.
             const targetIndex = slides.findIndex(s => s === targetSlide);
             const moveAmount = targetIndex * 100; // 100% per slide
-            
+
             // In RTL, moving left means translating positive X to see elements on the left.
             track.style.transform = `translateX(${moveAmount}%)`;
-            
+
             currentSlide.classList.remove('current-slide');
             targetSlide.classList.add('current-slide');
-            
+
             // update ARIA
             currentSlide.removeAttribute('aria-hidden');
             slides.forEach(s => {
