@@ -62,8 +62,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (backdrop) backdrop.classList.add('active');
             document.body.style.overflow = 'hidden'; // Lock scroll
             
-            // Move to center with 2.5x scale
-            card.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(2.5)`;
+            // Compute scale so the card fits within the viewport at every screen size.
+            // Target: card fills ~85vw / 80vh (whichever is tighter), max scale = 2.5
+            const maxScaleX = (window.innerWidth  * 0.85) / rect.width;
+            const maxScaleY = (window.innerHeight * 0.80) / rect.height;
+            const scale = Math.min(maxScaleX, maxScaleY, 2.5);
+
+            // Expose scale as a CSS variable so calc() in .flip-card-back stays in sync
+            card.style.setProperty('--card-scale', scale);
+
+            // Move to center with responsive scale
+            card.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
 
             // Wait for move transition to finish, then flip
             setTimeout(() => {

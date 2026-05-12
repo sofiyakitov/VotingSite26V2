@@ -80,7 +80,7 @@ h6,
 
 /* Section Titles */
 .section-title {
-    font-size: 2.5rem;
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
     font-weight: 700;
     position: relative;
     display: inline-block;
@@ -122,7 +122,7 @@ h6,
 
 .hero-text-box {
     background-color: rgba(0, 0, 0, 0.4);
-    padding: 2.5rem;
+    padding: 1 rem;
     border-radius: var(--border-radius-lg);
     backdrop-filter: blur(5px);
     text-align: right;
@@ -130,19 +130,37 @@ h6,
 }
 
 .hero-title {
+    font-size: clamp(1.6rem, 5vw, 3.2rem);
     font-weight: 700;
     line-height: 1.2;
 }
 
+h1 {
+    font-size: 2.5rem !important;
+}
+
 .hero-subtitle {
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-size: clamp(1.2rem, 3vw, 2rem);
     font-weight: 400;
     color: var(--bg-cream) !important;
 }
 
 .hero-description {
-    font-size: 1.25rem;
+    font-size: clamp(0.95rem, 2vw, 1.25rem);
     opacity: 0.9;
+}
+
+/* Why Vote Section — full-screen */
+.why-vote {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.why-vote>.container {
+    flex: 0 1 auto;
 }
 
 /* Carousel Section */
@@ -231,6 +249,19 @@ h6,
     transform: scale(1.2);
 }
 
+/* How to Vote Section — full-screen */
+.how-to-vote {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.how-to-vote>.container {
+    flex: 0 1 auto;
+}
+
 /* How to vote (Interactive Flip Cards Minimal Modal) */
 .cards-backdrop {
     position: fixed;
@@ -316,36 +347,36 @@ h6,
 .flip-card-back {
     transform: rotateY(180deg);
     background-color: var(--bg-cream);
-    padding: calc(1.5rem / 2.5) calc(1rem / 2.5);
+    padding: calc(1.5rem / var(--card-scale, 2.5)) calc(1rem / var(--card-scale, 2.5));
 }
 
 .flip-card-back h4 {
-    font-size: calc(1.25rem / 2.5);
-    margin-bottom: calc(0.5rem / 2.5);
+    font-size: calc(1.25rem / var(--card-scale, 2.5));
+    margin-bottom: calc(0.5rem / var(--card-scale, 2.5));
 }
 
 .flip-card-back p,
 .flip-card-back li {
-    font-size: calc(1rem / 2.5);
+    font-size: calc(1rem / var(--card-scale, 2.5));
     line-height: 1.4;
     margin-bottom: 0;
 }
 
 .flip-card-back img {
-    max-height: calc(120px / 2.5);
+    max-height: calc(120px / var(--card-scale, 2.5));
 }
 
 .close-card-btn {
     position: absolute;
-    top: calc(10px / 2.5);
-    right: calc(10px / 2.5);
+    top: calc(10px / var(--card-scale, 2.5));
+    right: calc(10px / var(--card-scale, 2.5));
     background: transparent;
     border: none;
     color: #e53935;
     /* Red X */
-    font-size: calc(2rem / 2.5);
+    font-size: calc(2rem / var(--card-scale, 2.5));
     line-height: 1;
-    padding: calc(5px / 2.5);
+    padding: calc(5px / var(--card-scale, 2.5));
     cursor: pointer;
     z-index: 10;
     transition: transform 0.2s, opacity 0.2s;
@@ -371,7 +402,7 @@ h6,
 }
 
 .step-title {
-    font-size: 1.25rem;
+    font-size: clamp(0.85rem, 1.5vw, 1.25rem);
     margin: 0;
     font-family: var(--font-body);
     font-weight: 700;
@@ -413,23 +444,34 @@ h6,
 .skeleton-bar {
     height: 16px;
     border-radius: 8px;
-    background: linear-gradient(
-        90deg,
-        var(--global-main-light) 25%,
-        #e8f0e6 50%,
-        var(--global-main-light) 75%
-    );
+    background: linear-gradient(90deg,
+            var(--global-main-light) 25%,
+            #e8f0e6 50%,
+            var(--global-main-light) 75%);
     background-size: 200% 100%;
     animation: shimmer 1.4s infinite linear;
 }
 
-.skeleton-bar--short  { width: 40%; }
-.skeleton-bar--long   { width: 85%; }
-.skeleton-bar--medium { width: 62%; }
+.skeleton-bar--short {
+    width: 40%;
+}
+
+.skeleton-bar--long {
+    width: 85%;
+}
+
+.skeleton-bar--medium {
+    width: 62%;
+}
 
 @keyframes shimmer {
-    0%   { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 /* --- iframe --- */
@@ -464,12 +506,8 @@ h6,
     }
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments — Mobile (keep existing) */
 @media (max-width: 768px) {
-    .section-title {
-        font-size: 2rem;
-    }
-
     .custom-card {
         padding: 1rem;
     }
@@ -496,6 +534,171 @@ h6,
     }
 }
 
+/* ============================================================
+   DESKTOP / LAPTOP RESPONSIVE OPTIMISATIONS
+   - Targets min-width so mobile stays untouched
+   ============================================================ */
+
+/* --- Laptops & small desktops (≥ 1024px) --- */
+@media (min-width: 1024px) {
+
+    /* Hero — fill screen better, bigger text, wider box */
+    .hero-section {
+        min-height: 100vh;
+    }
+
+    .hero-text-box {
+        padding: 2.5rem 3rem;
+        max-width: 600px;
+    }
+
+    .hero-title {
+        font-size: clamp(2.2rem, 4vw, 3.4rem);
+    }
+
+    .hero-description {
+        font-size: 1.15rem;
+    }
+
+    .hero-text {
+        /* push the text column more toward the right (RTL) so it doesn't cover the girl */
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    /* Why Vote — full-screen, centered */
+    .why-vote {
+        min-height: 100vh;
+    }
+
+    .why-vote .section-title {
+        margin-bottom: 0.5rem !important;
+    }
+
+    .why-vote .fs-4 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .custom-card .card-img {
+        height: 280px !important;
+        object-fit: cover;
+    }
+
+    .carousel-track-container {
+        padding: 0.5rem 0;
+    }
+
+    .carousel-controls {
+        margin-top: 0.75rem !important;
+    }
+
+    /* How to vote — full-screen, centered */
+    .how-to-vote {
+        min-height: 100vh;
+    }
+
+    .how-to-vote .section-title {
+        margin-bottom: 0.75rem !important;
+    }
+
+    .how-to-vote .row.mb-5 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* Simulator — compact desktop layout */
+    .simulator-section {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+
+    .simulator-section .text-center.mb-5 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .simulator-section .section-title {
+        margin-bottom: 0.25rem;
+    }
+
+    .simulator-section .fs-5 {
+        margin-top: 0.5rem !important;
+    }
+
+    .simulator-wrapper {
+        min-height: 480px;
+    }
+
+    /* Footer — slightly less padding */
+    .site-footer {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+}
+
+/* --- Standard laptops (≥ 1366px, typical 1366×768) --- */
+@media (min-width: 1366px) {
+
+    /* Hero — bigger text box, larger heading, better visual weight */
+    .hero-text-box {
+        padding: 3rem 3.5rem;
+        max-width: 660px;
+    }
+
+    .hero-title {
+        font-size: clamp(2.6rem, 3.8vw, 3.8rem);
+    }
+
+    .hero-description {
+        font-size: 1.2rem;
+        line-height: 1.7;
+    }
+
+    /* Why Vote — cards shorter, less breathing room */
+    .custom-card .card-img {
+        height: 260px !important;
+    }
+
+    .custom-carousel {
+        max-width: 850px;
+    }
+
+    /* Simulator — wider container */
+    .simulator-wrapper {
+        max-width: 920px;
+    }
+}
+
+/* --- Large desktops (≥ 1920px) — use extra real estate --- */
+@media (min-width: 1920px) {
+
+    /* Hero — even more presence */
+    .hero-text-box {
+        padding: 3.5rem 4rem;
+        max-width: 740px;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+    }
+
+    .hero-description {
+        font-size: 1.3rem;
+    }
+
+    /* Why Vote — larger carousel */
+    .custom-carousel {
+        max-width: 950px;
+    }
+
+    .custom-card .card-img {
+        height: 320px !important;
+    }
+
+    /* Simulator */
+    .simulator-wrapper {
+        max-width: 1000px;
+    }
+}
+
 /* Navbar */
 .custom-navbar {
     background-color: var(--global-main-color);
@@ -509,7 +712,7 @@ h6,
 
 .website-name {
     font-family: var(--font-heading);
-    font-size: 1rem;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
     color: var(--text-dark);
     line-height: 1;
 }
