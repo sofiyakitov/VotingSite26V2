@@ -18,6 +18,23 @@
     --transition-speed: 0.3s;
 }
 
+.skip-link {
+    position: absolute;
+    top: -40px;
+    right: 10px;
+    background: white;
+    color: black;
+    padding: 10px 16px;
+    z-index: 9999;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: top 0.2s;
+}
+
+.skip-link:focus {
+    top: 10px;
+}
+
 body {
     font-family: var(--font-body);
     color: var(--text-dark);
@@ -54,8 +71,8 @@ h6,
 
 /* Custom Focus for Accessibility */
 *:focus-visible {
-    outline: 3px solid var(--global-main-dark);
-    outline-offset: 3px;
+    outline: 3px solid #3f4f3d;
+    outline-offset: 2px;
 }
 
 /* Custom Buttons */
@@ -294,10 +311,16 @@ h1 {
     perspective: 1000px;
     height: 100%;
     min-height: 120px;
-    outline: none;
     position: relative;
     z-index: 1;
     transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1), opacity 0.6s ease, filter 0.6s ease;
+    background: transparent;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    display: block;
 }
 
 .flip-card-container.card-active {
@@ -730,7 +753,10 @@ h1 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.custom-toggler:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px var(--global-main-dark);
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

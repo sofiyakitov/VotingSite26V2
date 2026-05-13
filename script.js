@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const flipCards = document.querySelectorAll('.flip-card-container');
     const howToVoteSection = document.querySelector('.how-to-vote');
     const backdrop = document.getElementById('cards-backdrop');
-    
+
     let activeCard = null;
 
     const closeActiveCard = () => {
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Unflip first
         activeCard.classList.remove('flipped');
-        
+
         // Wait for unflip animation to finish (e.g. 300ms), then move back
         setTimeout(() => {
             if (activeCard) {
@@ -45,14 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Activate new card
             activeCard = card;
-            
+
             // Calculate center position
             const rect = card.getBoundingClientRect();
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
             const cardCenterX = rect.left + rect.width / 2;
             const cardCenterY = rect.top + rect.height / 2;
-            
+
             const translateX = centerX - cardCenterX;
             const translateY = centerY - cardCenterY;
 
@@ -61,10 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (howToVoteSection) howToVoteSection.classList.add('has-active-card');
             if (backdrop) backdrop.classList.add('active');
             document.body.style.overflow = 'hidden'; // Lock scroll
-            
+
             // Compute scale so the card fits within the viewport at every screen size.
             // Target: card fills ~85vw / 80vh (whichever is tighter), max scale = 2.5
-            const maxScaleX = (window.innerWidth  * 0.85) / rect.width;
+            const maxScaleX = (window.innerWidth * 0.85) / rect.width;
             const maxScaleY = (window.innerHeight * 0.80) / rect.height;
             const scale = Math.min(maxScaleX, maxScaleY, 2.5);
 
@@ -221,6 +221,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateDots(currentDot, prevDot);
             }
         });
+
+        // Keyboard navigation
+        const carousel = document.querySelector('.custom-carousel');
+        if (carousel) {
+            carousel.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') {
+                    // Right arrow goes to next slide conceptually, but in RTL layout next button logic
+                    const currentSlide = track.querySelector('.current-slide');
+                    const nextSlide = currentSlide.nextElementSibling;
+                    const currentDot = dotsNav.querySelector('.current-indicator');
+                    const nextDot = currentDot.nextElementSibling;
+
+                    if (nextSlide) {
+                        moveToSlide(track, currentSlide, nextSlide);
+                        updateDots(currentDot, nextDot);
+                    }
+                }
+                if (e.key === 'ArrowLeft') {
+                    const currentSlide = track.querySelector('.current-slide');
+                    const prevSlide = currentSlide.previousElementSibling;
+                    const currentDot = dotsNav.querySelector('.current-indicator');
+                    const prevDot = currentDot.previousElementSibling;
+
+                    if (prevSlide) {
+                        moveToSlide(track, currentSlide, prevSlide);
+                        updateDots(currentDot, prevDot);
+                    }
+                }
+            });
+        }
 
         // Click Dot
         dotsNav.addEventListener('click', e => {
